@@ -4,6 +4,7 @@ import imprimirDadosDaLista from "./imprimir.js";
 
 const produto = document.getElementById("produto");
 const preco = document.getElementById("preco");
+const validade = document.getElementById("validade");
 const botao = document.getElementById("botaoEnviar");
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -50,6 +51,11 @@ produto.onkeyup = () => {
 
 preco.onkeyup = () => {
     var termo = preco.value.toLowerCase();
+    filtrar(termo)
+};
+
+validade.onkeyup = () => {
+    var termo = validade.value.toLowerCase();
     filtrar(termo)
 };
 
