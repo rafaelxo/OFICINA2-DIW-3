@@ -44,6 +44,7 @@ export async function enviar(dados) {
   As chaves {} são obrigatórias em exportações nomeadas.
   Pode haver várias exportações nomeadas em um mesmo arquivo.
 */
+
 export async function buscar() {
   try {
     const resposta = await fetch(urlProdutos);

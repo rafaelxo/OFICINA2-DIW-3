@@ -55,7 +55,7 @@ preco.onkeyup = () => {
 };
 
 validade.onkeyup = () => {
-    var termo = validade.value.toLowerCase();
+    var termo = validade.value;
     filtrar(termo)
 };
 

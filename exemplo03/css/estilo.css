@@ -61,3 +61,15 @@ box-sizing: border-box;
  button {
      padding: .6rem 3rem;
  }
+
+ #botoes {
+
+ }
+
+ .editar {
+    background-color: green;
+ }
+
+ .excluir {
+    background-color: red;
+ }
