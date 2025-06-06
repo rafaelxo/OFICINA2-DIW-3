@@ -1,4 +1,4 @@
-import { enviar, buscar } from "./api/api.js";
+import { enviar, buscar, atualizar, excluir } from "./api.js";
 import lerDadosDoFormulario from "./ler.js";
 import imprimirDadosDaLista from "./imprimir.js";
 
@@ -7,6 +7,8 @@ const preco = document.getElementById("preco");
 const validade = document.getElementById("validade");
 const botao = document.getElementById("botaoEnviar");
 
+let editingId = null;
+
 window.addEventListener('DOMContentLoaded', async () => {
     const vetor = await buscar();
     atualizarLista(vetor);
@@ -14,23 +16,30 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 botao.addEventListener("click", (event) => {
     event.preventDefault();
-    adicionar();
+    adicionarOuAtualizar();
 });
 
 botao.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-        adicionar();
+        adicionarOuAtualizar();
     }
 });
 
-async function adicionar() {
+async function adicionarOuAtualizar() {
     const dados = lerDadosDoFormulario();
     if (dados) {
-        await enviar(dados);
+        if (editingId) {
+            await atualizar(editingId, dados);
+        } else {
+            await enviar(dados);
+        }
+        editingId = null;
+        botao.textContent = "Enviar";
         let vetor = await buscar();
         atualizarLista(vetor);
-    } else
+    } else {
         alert("Dados não enviados!");
+    }
 }
 
 function atualizarLista(vetor) {
@@ -39,24 +48,41 @@ function atualizarLista(vetor) {
 
     vetor.forEach(elemento => {
         const li = document.createElement('li');
-        li.innerHTML = imprimirDadosDaLista(elemento)
+        li.innerHTML = imprimirDadosDaLista(elemento);
+        li.dataset.id = elemento.id;
+        
+        const botaoEditar = li.querySelector('.editar');
+        const botaoExcluir = li.querySelector('.excluir');
+        
+        botaoEditar.addEventListener('click', () => {
+            editingId = elemento.id;
+            produto.value = elemento.produto;
+            preco.value = elemento.preco;
+            validade.value = elemento.validade;
+            botao.textContent = "Atualizar";
+        });
+
+        botaoExcluir.addEventListener('click', () => {
+            excluir(elemento.id);
+        });
+
         lista.appendChild(li);
     });
 }
 
 produto.onkeyup = () => {
     var termo = produto.value.toLowerCase();
-    filtrar(termo)
+    filtrar(termo);
 };
 
 preco.onkeyup = () => {
     var termo = preco.value.toLowerCase();
-    filtrar(termo)
+    filtrar(termo);
 };
 
 validade.onkeyup = () => {
     var termo = validade.value;
-    filtrar(termo)
+    filtrar(termo);
 };
 
 function filtrar(termo) {
